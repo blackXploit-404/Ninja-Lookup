@@ -13,11 +13,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
 app.get('/', (req, res) => {
   res.render('index', { result: null });
 });
 
-
+// Handle the WHOIS lookup
 app.get('/whois', async (req, res) => {
   const domain = req.query.domain;
 
@@ -42,7 +43,7 @@ app.get('/whois', async (req, res) => {
   }
 });
 
-
+// Handle the Hosting lookup
 app.get('/lookup', async (req, res) => {
   const domain = req.query.domain;
 
@@ -64,7 +65,13 @@ app.get('/lookup', async (req, res) => {
   }
 });
 
-// Start the server
+
+app.use((req, res) => {
+  const ip = req.ip; 
+  res.status(404).render('404', { ip: ip }); 
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
