@@ -9,6 +9,7 @@
 - **Geolocation Information**: Display city, region, country, latitude, and longitude of the IP address.
 - **Embedded Map**: Interactive map display based on geolocation data.
 - **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Search 🔍 History**: Added search history option
 
 ## Technologies Used
 
