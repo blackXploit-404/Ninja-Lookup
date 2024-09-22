@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PR9BHV5V50"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-PR9BHV5V50');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Lookup-Now 🚀</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta name="description" content="Lookup-Now is a simple tool to explore domains and discover hosting providers.">
+  <meta name="keywords" content="lookup, domain, hosting, whois, ip, isp, city, region, country, latitude, longitude">
+  <meta name="author" content="Devsecure Innovations">
+  <meta name="robots" content="index, follow">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
+    /* Existing styles remain unchanged */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #000000;
+      font-family: consolas, monospace;
+      background-color: #ffffff;
       margin: 0;
       padding: 20px;
+      color: rgb(255, 255, 255);
     }
+
     .container {
       max-width: 800px;
       margin: auto;
       padding: 20px;
-      background: rgb(0, 0, 0);  
+      background: #ffffff;
+      border-radius: 10px;
     }
-    h1 {
-      text-align: center;
-      color: #ffffff;
-      animation: fadeIn 0.5s;
 
-    }
-    h2 {
+    h1, h2 {
       text-align: center;
-      color: #ffffff;
+      color: #000000;
       animation: fadeIn 0.5s;
     }
+
     form {
       display: flex;
       justify-content: center;
       margin-bottom: 20px;
       animation: slideIn 0.5s;
     }
+
     input[type="text"] {
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 12px;
+      border: 1px solid #000000;
       border-radius: 5px;
       width: 70%;
       margin-right: 10px;
       transition: border-color 0.3s;
+      background-color: #ffffff;
+      color: rgb(0, 0, 0);
     }
+
     input[type="text"]:focus {
-      border-color: #28a745;
+      border-color: #000000;
+      outline: none;
     }
+
     button {
-      padding: 10px 15px;
+      padding: 12px 20px;
       border: none;
       border-radius: 5px;
       background-color: #28a745;
@@ -57,55 +78,68 @@
       transition: background-color 0.3s, transform 0.3s;
       margin-left: 10px;
     }
+
     button:hover {
       background-color: #218838;
       transform: scale(1.05);
     }
-    #result-area, #whois-area {
+
+    #result-area, #whois-area, #history-area {
       margin-top: 20px;
       border: 1px solid #ccc;
       padding: 15px;
       border-radius: 5px;
       background-color: #f9f9f9;
+      color: black;
       animation: fadeIn 0.5s;
     }
-    #res-i-map {
-      margin-top: 15px;
-    }
+
     footer {
       text-align: center;
       margin-top: 20px;
       font-size: 0.9em;
       color: #666;
     }
-    img {
-      margin-top: 10px;
-      border-radius: 5px;
-    }
+
     .loader {
       display: none;
-      border: 4px solid #f3f3f3; /* Light grey */
-      border-top: 4px solid #3498db; /* Blue */
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
       border-radius: 50%;
       width: 40px;
       height: 40px;
       animation: spin 1s linear infinite;
       margin: auto;
     }
+
+    .error-message {
+      color: #ff6b6b;
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
     @keyframes slideIn {
       from { transform: translateY(-20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Lookup Now 🔍</h1>
@@ -115,6 +149,7 @@
       <button type="button" id="domain_lookup_btn">Domain Lookup</button>
       <button type="button" id="hosting_lookup_btn">Hosting Lookup</button>
     </form>
+    <p id="error-message" class="error-message hidden">Please enter a domain name.</p>
 
     <div class="loader" id="loader"></div>
 
@@ -141,98 +176,163 @@
       <div id="res-i-map"></div>
     </div>
 
+    <div id="history-area" style="display: none;">
+      <h3>Search History 🕒</h3>
+      <ul id="history-list"></ul>
+    </div>
+
     <footer>
       <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
-      <p>A Devsecure Innovations Product </p>
+      <p>A Devsecure Innovations Product</p>
+      <p><button><a href="https://github.com/blackXploit-404/Lookup-Now">Check On GitHub ⭐</a></button></p>
     </footer>
   </div>
 
   <script>
-    $("#domain_lookup_btn").click(function() {
-      const domain = $("#domain_input").val();
-      fetch_whois(domain);
-    });
+    function showError(message) {
+      $("#error-message").text(message).removeClass("hidden");
+    }
 
-    $("#hosting_lookup_btn").click(function() {
-      const domain = $("#domain_input").val();
-      hosting_lookup(domain);
-    });
+    function hideError() {
+      $("#error-message").addClass("hidden");
+    }
+
+    async function fetchWhois(domain) {
+      try {
+        showLoader();
+        const response = await $.get(`/whois?domain=${domain}`);
+        $("#res-whois-json").text(JSON.stringify(response, null, 2));
+        $("#whois-area").show();
+      } catch (error) {
+        alert('Error fetching WHOIS data');
+        $("#whois-area").hide();
+      } finally {
+        hideLoader();
+      }
+    }
+
+    async function hostingLookup(domain) {
+      try {
+        showLoader();
+        const data = await $.get(`https://ipwhois.app/json/${domain}`);
+        const hostingProvider = data.isp || 'N/A';
+        $("#hosting-message").text(`${domain} is hosted on ${hostingProvider} 🎉`);
+
+        const hostingImageMap = {
+          "Google LLC": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
+          "Microsoft Corporation": "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
+          "Amazon.com, Inc.": "https://upload.wikimedia.org/wikipedia/commons/6/62/Amazon.com-Logo.svg",
+          "Cloudflare, Inc.": "https://www.cloudflare.com/img/logo-cloudflare-dark.svg",
+          "DigitalOcean, LLC": "https://www.digitalocean.com/assets/media/logos-badges/DO_Logo_horizontal_blue.svg",
+          "OVH SAS": "https://www.ovh.com/fr/images/logos/ovh-logo.png",
+          "GoDaddy.com, LLC": "https://upload.wikimedia.org/wikipedia/commons/1/1a/GoDaddy_logo.svg",
+          "Shopify, Inc.": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg",
+          "Squarespace, Inc.": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Squarespace_logo.svg",
+          "Wix.com Ltd.": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Wix.com_website_logo.png",
+          "Automattic, Inc": "https://upload.wikimedia.org/wikipedia/commons/9/91/Automattic_logo.png",
+          "Namecheap, Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Namecheap_logo.png",
+          "IONOS by 1&1": "https://upload.wikimedia.org/wikipedia/commons/4/4b/1%261_Logo_2018.svg",
+          "HostGator.com LLC": "https://upload.wikimedia.org/wikipedia/commons/3/3b/HostGator_logo.png",
+          "Bluehost Inc.": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Bluehost_logo.png",
+          "DreamHost, LLC": "https://upload.wikimedia.org/wikipedia/commons/4/4a/DreamHost_logo.png",
+          "InMotion Hosting, Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/InMotion_Hosting_logo.png",
+          "SiteGround Hosting Ltd.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/SiteGround_logo.png",
+          "A2 Hosting, Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/A2_Hosting_logo.png",
+          "Hostinger International Ltd.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hostinger_logo.png",
+          "Kinsta Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Kinsta_logo.png",
+          "Liquid Web, L.L.C": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Liquid_Web_logo.png",
+          "WP Engine, Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/WP_Engine_logo.png",
+          "GreenGeeks, LLC": "https://upload.wikimedia.org/wikipedia/commons/4/4b/GreenGeeks_logo.png",
+          "HostPapa Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/HostPapa_logo.png",
+          "Scala Hosting LLC": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Scala_Hosting_logo.png",
+          "TMDHosting LLC": "https://upload.wikimedia.org/wikipedia/commons/4/4b/TMDHosting_logo.png",
+          "InterNetX GmbH": "https://upload.wikimedia.org/wikipedia/commons/4/4b/InterNetX_logo.png",
+          "IONOS SE": "https://upload.wikimedia.org/wikipedia/commons/4/4b/1%261_Logo_2018.svg",
+          "Strato AG": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Strato_logo.png",
+          "United Internet AG": "https://upload.wikimedia.org/wikipedia/commons/4/4b/United_Internet_logo.png",
+          "1&1 IONOS SE": "https://upload.wikimedia.org/wikipedia/commons/4/4b/1%261_Logo_2018.svg",
+          "1&1 IONOS Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/1%261_Logo_2018.svg",
+          "1&1 IONOS Ltd.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/1%261_Logo_2018.svg",
+          
+        };
+
+        const hostingImage = hostingImageMap[hostingProvider] || 'https://via.placeholder.com/150';
+        $("#hosting-image").html(`<img src="${hostingImage}" style="width: 150px;">`);
+
+        $("#res-i-ip").text(data.ip || 'N/A');
+        $("#res-i-iptype").text(data.type || 'N/A');
+        $("#res-i-isp").text(data.isp || 'N/A');
+        $("#res-i-city").text(data.city || 'N/A');
+        $("#res-i-region").text(data.region || 'N/A');
+        $("#res-i-country").text(data.country || 'N/A');
+        $("#res-i-longitude").text(data.longitude || 'N/A');
+        $("#res-i-latitude").text(data.latitude || 'N/A');
+        $("#result-area").show();
+
+        // Save to history
+        saveToHistory(domain);
+      } catch (error) {
+        alert('Error fetching hosting data');
+        $("#result-area").hide();
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function saveToHistory(domain) {
+      let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+      if (!history.includes(domain)) {
+        history.push(domain);
+        localStorage.setItem('searchHistory', JSON.stringify(history));
+        displayHistory();
+      }
+    }
+
+    function displayHistory() {
+      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+      $("#history-list").empty();
+      if (history.length > 0) {
+        history.forEach(domain => {
+          $("#history-list").append(`<li>${domain}</li>`);
+        });
+        $("#history-area").show();
+      } else {
+        $("#history-area").hide();
+      }
+    }
 
     function showLoader() {
       $("#loader").show();
-      $("#result-area").hide();
-      $("#whois-area").hide();
     }
 
     function hideLoader() {
       $("#loader").hide();
     }
 
-    function fetch_whois(domain) {
-      showLoader();
-      $.get(`/whois?domain=${domain}`, function(data) {
-        hideLoader();
-        $("#res-whois-json").text(JSON.stringify(data, null, 2));
-        $("#whois-area").show();
-      }).fail(function() {
-        hideLoader();
-        alert('Error fetching WHOIS data');
-        $("#whois-area").hide();
-      });
-    }
+    $(document).ready(function() {
+      displayHistory(); // Show history on page load
 
-    function hosting_lookup(domain) {
-      showLoader();
-      $.ajax({
-        type: "GET",
-        url: `https://ipwhois.app/json/${domain}`,
-        success: function(data) {
-          hideLoader();
-          const hostingProvider = data.isp || 'N/A';
-          $("#hosting-message").text(`${domain} is hosted on ${hostingProvider} 🎉`);
-
-          const hostingImageMap = {
-            "Google LLC": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
-            "Amazon.com": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
-            "Cloudflare": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Cloudflare_Logo.svg",
-            "HostGator": "https://upload.wikimedia.org/wikipedia/commons/6/6b/HostGator_logo.svg",
-            "GoDaddy": "https://upload.wikimedia.org/wikipedia/commons/1/1c/GoDaddy_logo.svg",
-            "Bluehost": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Bluehost_logo.svg",
-            "SiteGround": "https://upload.wikimedia.org/wikipedia/commons/1/1c/SiteGround_logo.svg",
-            "DreamHost": "https://upload.wikimedia.org/wikipedia/commons/1/1c/DreamHost_logo.svg",
-            "InMotion Hosting": "https://upload.wikimedia.org/wikipedia/commons/1/1c/InMotion_Hosting_logo.svg",
-            "A2 Hosting": "https://upload.wikimedia.org/wikipedia/commons/1/1c/A2_Hosting_logo.svg",
-            "Hostinger": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Hostinger_logo.svg",
-            "iPage": "https://upload.wikimedia.org/wikipedia/commons/1/1c/iPage_logo.svg",
-            "HostPapa": "https://upload.wikimedia.org/wikipedia/commons/1/1c/HostPapa_logo.svg",
-            "GreenGeeks": "https://upload.wikimedia.org/wikipedia/commons/1/1c/GreenGeeks_logo.svg",
-            "Kinsta": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Kinsta_logo.svg",
-            "WP Engine": "https://upload.wikimedia.org/wikipedia/commons/1/1c/WP_Engine_logo.svg",
-            "Liquid Web": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Liquid_Web_logo.svg",
-            "Namecheap": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Namecheap_logo.svg",
-          };
-          const hostingImage = hostingImageMap[hostingProvider] || "https://via.placeholder.com/150";
-          $("#hosting-image").html(`<img src="${hostingImage}" alt="${hostingProvider} logo" height="50">`);
-
-          $("#res-i-ip").text(data.ip || 'N/A');
-          $("#res-i-iptype").text(data.type || 'N/A');
-          $("#res-i-isp").text(data.isp || 'N/A');
-          $("#res-i-city").text(data.city || 'N/A');
-          $("#res-i-region").text(data.region || 'N/A');
-          $("#res-i-country").html(`<img src="${data.country_flag}" height="12px">&nbsp;&nbsp;${data.country}`);
-          $("#res-i-longitude").text(data.longitude || 'N/A');
-          $("#res-i-latitude").text(data.latitude || 'N/A');
-
-          $("#res-i-map").html(`<iframe src="https://maps.google.com/maps?q=${data.latitude},${data.longitude}&hl=es;z=14&amp;output=embed" class="w-100" style="height: 210px; border: 1px solid #ccc; border-radius: 7px;"></iframe>`);
-
-          $("#result-area").show();
-        },
-        error: function() {
-          hideLoader();
-          alert('Error fetching Hosting data');
+      $("#domain_lookup_btn").click(function() {
+        const domain = $("#domain_input").val();
+        if (!domain) {
+          showError("Please enter a domain name.");
+        } else {
+          hideError();
+          fetchWhois(domain);
         }
       });
-    }
+
+      $("#hosting_lookup_btn").click(function() {
+        const domain = $("#domain_input").val();
+        if (!domain) {
+          showError("Please enter a domain name.");
+        } else {
+          hideError();
+          hostingLookup(domain);
+        }
+      });
+    });
   </script>
 </body>
+
 </html>

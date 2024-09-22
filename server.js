@@ -59,14 +59,20 @@ app.get('/lookup', async (req, res) => {
 
     const whoisData = response.data;
     res.render('index', { result: whoisData });
-
   } catch (error) {
     console.error(error);
     res.render('index', { result: 'Error fetching data' });
   }
 });
 
-// Start the server
+
+app.use((req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  res.status(404).render('404', { ip: ip });
+});
+
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
