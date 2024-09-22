@@ -6,19 +6,18 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware to serve static files
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set EJS as the templating engine
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Serve the home page
 app.get('/', (req, res) => {
   res.render('index', { result: null });
 });
 
-// Handle the WHOIS lookup
+
 app.get('/whois', async (req, res) => {
   const domain = req.query.domain;
 
@@ -43,7 +42,7 @@ app.get('/whois', async (req, res) => {
   }
 });
 
-// Handle the Hosting lookup
+
 app.get('/lookup', async (req, res) => {
   const domain = req.query.domain;
 
@@ -65,14 +64,7 @@ app.get('/lookup', async (req, res) => {
   }
 });
 
-
-app.use((req, res) => {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  res.status(404).render('404', { ip: ip });
-});
-
-
-
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
