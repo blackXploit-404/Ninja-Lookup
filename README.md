@@ -67,9 +67,3 @@
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue if you find bugs or have suggestions for improvements.
 
-
-## Acknowledgments
-
-- Thanks to the API providers for their services.
-- Inspiration from various open-source projects.
-```
