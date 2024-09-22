@@ -243,13 +243,14 @@
           $("#res-i-map").html(`<iframe src="https://maps.google.com/maps?q=${data.latitude},${data.longitude}&hl=es;z=14&amp;output=embed" class="w-100" style="height: 210px; border: 1px solid #ccc; border-radius: 7px;"></iframe>`);
 
           $("#result-area").show();
-        },
-        error: function() {
-          hideLoader();
-          alert('Error fetching Hosting data');
-        }
-      });
-    });
+        hideLoader();
+      } catch (error) {
+        alert('Error fetching Hosting data');
+        $("#result-area").hide();
+      } finally {
+        hideLoader();
+      }
+    }
   </script>
 </body>
 
