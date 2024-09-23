@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
   res.render('index', { result: null });
 });
 
-// Handle the WHOIS lookup
 app.get('/whois', async (req, res) => {
   const domain = req.query.domain;
 
