@@ -179,7 +179,6 @@
     <div id="history-area" style="display: none;">
       <h3>Search History 🕒</h3>
       <ul id="history-list"></ul>
-      <button id="delete-history-btn" style="margin-top: 10px;">Delete History</button>
     </div>
 
     <footer>
@@ -294,7 +293,7 @@
         $("#result-area").show();
         $("#whois-area").hide();
         
-        // Add to search history
+        
         if (!historyList.includes(domain)) {
           historyList.push(domain);
           updateHistory();
@@ -356,11 +355,6 @@
       $("#share-hosting-btn").on("click", function () {
         const hostingInfo = `IP: ${$("#res-i-ip").text()}\nISP: ${$("#res-i-isp").text()}\nCity: ${$("#res-i-city").text()}\nRegion: ${$("#res-i-region").text()}\nCountry: ${$("#res-i-country").text()}`;
         copyToClipboard(hostingInfo);
-      });
-
-      $("#delete-history-btn").on("click", function () {
-        historyList.length = 0;
-        updateHistory();
       });
 
       $(document).on("click", ".remove-history-btn", function () {
