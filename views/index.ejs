@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443583994127030"
+     crossorigin="anonymous"></script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PR9BHV5V50"></script>
   <script>
@@ -22,7 +24,6 @@
   <meta name="robots" content="index, follow">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    /* Existing styles remain unchanged */
     body {
       font-family: consolas, monospace;
       background-color: #ffffff;
@@ -179,6 +180,7 @@
     <div id="history-area" style="display: none;">
       <h3>Search History 🕒</h3>
       <ul id="history-list"></ul>
+      <button id="delete-history-btn" style="margin-top: 10px;">Delete History</button>
     </div>
 
     <footer>
@@ -257,11 +259,19 @@
           "Hostiso Ltd.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hostiso_logo.png",
           "HostUpon Inc.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/HostUpon_logo.png",
           "Hostiso Ltd.": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hostiso_logo.png",
-          
+          "facebook": "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+          "Twitter": "https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg",
+          "Instagram": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
+          "LinkedIn": "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
+          "Pinterest": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Pinterest_Logo.png",
+
         };
 
-        const hostingImage = hostingImageMap[hostingProvider] || 'https://via.placeholder.com/150';
-        $("#hosting-image").html(`<img src="${hostingImage}" style="width: 150px;">`);
+        if (hostingImageMap[hostingProvider]) {
+          $("#hosting-image").html(`<img src="${hostingImageMap[hostingProvider]}" alt="${hostingProvider}" style="height: 40px;">`);
+        } else {
+          $("#hosting-image").html("");  
+        }
 
         $("#res-i-ip").text(data.ip || 'N/A');
         $("#res-i-iptype").text(data.type || 'N/A');
@@ -272,36 +282,12 @@
         $("#res-i-longitude").text(data.longitude || 'N/A');
         $("#res-i-latitude").text(data.latitude || 'N/A');
         $("#result-area").show();
-
-        // Save to history
-        saveToHistory(domain);
+        updateHistory(domain, hostingProvider);
       } catch (error) {
         alert('Error fetching hosting data');
         $("#result-area").hide();
       } finally {
         hideLoader();
-      }
-    }
-
-    function saveToHistory(domain) {
-      let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-      if (!history.includes(domain)) {
-        history.push(domain);
-        localStorage.setItem('searchHistory', JSON.stringify(history));
-        displayHistory();
-      }
-    }
-
-    function displayHistory() {
-      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-      $("#history-list").empty();
-      if (history.length > 0) {
-        history.forEach(domain => {
-          $("#history-list").append(`<li>${domain}</li>`);
-        });
-        $("#history-area").show();
-      } else {
-        $("#history-area").hide();
       }
     }
 
@@ -313,10 +299,37 @@
       $("#loader").hide();
     }
 
-    $(document).ready(function() {
-      displayHistory(); // Show history on page load
+    function updateHistory(domain, hostingProvider) {
+      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+      history.push({ domain, hostingProvider });
+      localStorage.setItem('searchHistory', JSON.stringify(history));
+      displayHistory();
+    }
 
-      $("#domain_lookup_btn").click(function() {
+    function displayHistory() {
+      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+      if (history.length > 0) {
+        $("#history-list").empty();
+        history.forEach(item => {
+          const listItem = `<li>${item.domain} is hosted on ${item.hostingProvider}</li>`;
+          $("#history-list").append(listItem);
+        });
+        $("#history-area").show();
+      } else {
+        $("#history-area").hide();
+      }
+    }
+
+    function deleteHistory() {
+      localStorage.removeItem('searchHistory');  
+      $("#history-list").empty();  
+      $("#history-area").hide();   
+    }
+
+    $(document).ready(function () {
+      displayHistory();  // Show history on page load
+
+      $("#domain_lookup_btn").click(function () {
         const domain = $("#domain_input").val();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -326,7 +339,7 @@
         }
       });
 
-      $("#hosting_lookup_btn").click(function() {
+      $("#hosting_lookup_btn").click(function () {
         const domain = $("#domain_input").val();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -334,6 +347,10 @@
           hideError();
           hostingLookup(domain);
         }
+      });
+
+      $("#delete-history-btn").click(function () {
+        deleteHistory();  
       });
     });
   </script>
