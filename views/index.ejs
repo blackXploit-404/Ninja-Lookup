@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-  <!-- Google tag (gtag.js) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443583994127030"
+     crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PR9BHV5V50"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-PR9BHV5V50');
   </script>
   <meta charset="UTF-8">
@@ -190,12 +190,22 @@
   </div>
 
   <script>
+    const historyList = [];
+
     function showError(message) {
       $("#error-message").text(message).removeClass("hidden");
     }
 
     function hideError() {
       $("#error-message").addClass("hidden");
+    }
+
+    function updateHistory() {
+      $("#history-list").empty();
+      historyList.forEach((entry, index) => {
+        $("#history-list").append(`<li>${entry} <button class="remove-history-btn" data-index="${index}">Remove</button></li>`);
+      });
+      $("#history-area").toggle(historyList.length > 0);
     }
 
     async function fetchWhois(domain) {
@@ -283,6 +293,12 @@
 
         $("#result-area").show();
         $("#whois-area").hide();
+        
+        // Add to search history
+        if (!historyList.includes(domain)) {
+          historyList.push(domain);
+          updateHistory();
+        }
       } catch (error) {
         alert("Failed to fetch hosting data");
         $("#result-area").hide();
@@ -340,6 +356,17 @@
       $("#share-hosting-btn").on("click", function () {
         const hostingInfo = `IP: ${$("#res-i-ip").text()}\nISP: ${$("#res-i-isp").text()}\nCity: ${$("#res-i-city").text()}\nRegion: ${$("#res-i-region").text()}\nCountry: ${$("#res-i-country").text()}`;
         copyToClipboard(hostingInfo);
+      });
+
+      $("#delete-history-btn").on("click", function () {
+        historyList.length = 0;
+        updateHistory();
+      });
+
+      $(document).on("click", ".remove-history-btn", function () {
+        const index = $(this).data("index");
+        historyList.splice(index, 1);
+        updateHistory();
       });
     });
   </script>
