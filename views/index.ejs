@@ -60,6 +60,7 @@
       transition: border-color 0.3s;
       background-color: #ffffff;
       color: rgb(0, 0, 0);
+      margin-top: 5px;
     }
 
     input[type="text"]:focus {
@@ -76,6 +77,7 @@
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
       margin-left: 10px;
+      margin-top: 5px;
     }
 
     button:hover {
@@ -98,6 +100,7 @@
       margin-top: 20px;
       font-size: 0.9em;
       color: #666;
+
     }
 
     .loader {
@@ -184,12 +187,13 @@
     <footer>
       <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
       <p>A Devsecure Innovations Product</p>
+      <p>Last updated on 23.09.2024 , 11:21 am (search history updated) 🔔</p>
       <p><button><a href="https://github.com/blackXploit-404/Lookup-Now">Check On GitHub ⭐</a></button></p>
     </footer>
   </div>
 
   <script>
-    const historyList = [];
+    const historyList = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
     function showError(message) {
       $("#error-message").text(message).removeClass("hidden");
@@ -205,6 +209,7 @@
         $("#history-list").append(`<li>${entry} <button class="remove-history-btn" data-index="${index}">Remove</button></li>`);
       });
       $("#history-area").toggle(historyList.length > 0);
+      localStorage.setItem('searchHistory', JSON.stringify(historyList));
     }
 
     async function fetchWhois(domain) {
@@ -274,32 +279,24 @@
           "LinkedIn": "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
           "Pinterest": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Pinterest_Logo.png",
         };
+        
+        const hostingImage = hostingImageMap[hostingProvider] || 'https://via.placeholder.com/150';
+        $("#hosting-image").html(`<img src="${hostingImage}" alt="${hostingProvider} Logo" style="max-width: 100%; height: auto;">`);
 
-        if (hostingImageMap[hostingProvider]) {
-          $("#hosting-image").html(`<img src="${hostingImageMap[hostingProvider]}" alt="${hostingProvider}" style="height: 40px;">`);
-        } else {
-          $("#hosting-image").html("");  
-        }
-
-        $("#res-i-ip").text(data.ip || 'N/A');
-        $("#res-i-iptype").text(data.type || 'N/A');
-        $("#res-i-isp").text(data.isp || 'N/A');
-        $("#res-i-city").text(data.city || 'N/A');
-        $("#res-i-region").text(data.region || 'N/A');
-        $("#res-i-country").text(data.country || 'N/A');
-        $("#res-i-longitude").text(data.longitude || 'N/A');
-        $("#res-i-latitude").text(data.latitude || 'N/A');
+        $("#res-i-ip").text(data.ip);
+        $("#res-i-iptype").text(data.type);
+        $("#res-i-isp").text(data.isp);
+        $("#res-i-city").text(data.city);
+        $("#res-i-region").text(data.region);
+        $("#res-i-country").text(data.country);
+        $("#res-i-longitude").text(data.longitude);
+        $("#res-i-latitude").text(data.latitude);
 
         $("#result-area").show();
         $("#whois-area").hide();
-        
-        
-        if (!historyList.includes(domain)) {
-          historyList.push(domain);
-          updateHistory();
-        }
+        updateHistory(); // Update the search history
       } catch (error) {
-        alert("Failed to fetch hosting data");
+        alert('Error fetching hosting data');
         $("#result-area").hide();
       } finally {
         hideLoader();
@@ -314,52 +311,37 @@
       $("#loader").hide();
     }
 
-    function copyToClipboard(text) {
-      const tempInput = document.createElement('textarea');
-      tempInput.style.position = 'fixed';
-      tempInput.style.opacity = '0';
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      alert('Copied to clipboard!');
-    }
+    $(document).ready(function() {
+      
+      updateHistory();
 
-    $(document).ready(function () {
-      $("#domain_lookup_btn").on("click", function () {
-        const domain = $("#domain_input").val();
+      $("#domain_lookup_btn").click(async function() {
+        const domain = $("#domain_input").val().trim();
         if (!domain) {
           showError("Please enter a domain name.");
-        } else {
-          hideError();
-          fetchWhois(domain);
+          return;
         }
+        hideError();
+        fetchWhois(domain);
       });
 
-      $("#hosting_lookup_btn").on("click", function () {
-        const domain = $("#domain_input").val();
+      $("#hosting_lookup_btn").click(async function() {
+        const domain = $("#domain_input").val().trim();
         if (!domain) {
           showError("Please enter a domain name.");
-        } else {
-          hideError();
-          hostingLookup(domain);
+          return;
         }
+        hideError();
+        if (!historyList.includes(domain)) {
+          historyList.push(domain); 
+          updateHistory();
+        }
+        hostingLookup(domain);
       });
 
-      $("#share-whois-btn").on("click", function () {
-        const whoisInfo = $("#res-whois-json").text();
-        copyToClipboard(whoisInfo);
-      });
-
-      $("#share-hosting-btn").on("click", function () {
-        const hostingInfo = `IP: ${$("#res-i-ip").text()}\nISP: ${$("#res-i-isp").text()}\nCity: ${$("#res-i-city").text()}\nRegion: ${$("#res-i-region").text()}\nCountry: ${$("#res-i-country").text()}`;
-        copyToClipboard(hostingInfo);
-      });
-
-      $(document).on("click", ".remove-history-btn", function () {
+      $(document).on("click", ".remove-history-btn", function() {
         const index = $(this).data("index");
-        historyList.splice(index, 1);
+        historyList.splice(index, 1); 
         updateHistory();
       });
     });
