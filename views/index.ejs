@@ -155,6 +155,7 @@
     <div id="whois-area" style="display: none;">
       <h3>WHOIS Information 📄</h3>
       <pre id="res-whois-json" style="white-space: pre-wrap;"></pre>
+      <button id="share-whois-btn">Share WHOIS Info 📤</button>
       <div style="text-align: center; margin-top: 10px;">
         <p style="color: #666;">Powered by WHOIS</p>
         <img src="https://www.whois.com/images/logo.svg" alt="WHOIS Logo" style="height: 30px; margin-top: 5px;">
@@ -172,7 +173,7 @@
       <p><strong>Country:</strong> <span id="res-i-country"></span></p>
       <p><strong>Longitude:</strong> <span id="res-i-longitude"></span></p>
       <p><strong>Latitude:</strong> <span id="res-i-latitude"></span></p>
-      <div id="res-i-map"></div>
+      <button id="share-hosting-btn">Share Hosting Info 📤</button>
     </div>
 
     <div id="history-area" style="display: none;">
@@ -203,6 +204,7 @@
         const response = await $.get(`/whois?domain=${domain}`);
         $("#res-whois-json").text(JSON.stringify(response, null, 2));
         $("#whois-area").show();
+        $("#result-area").hide();
       } catch (error) {
         alert('Error fetching WHOIS data');
         $("#whois-area").hide();
@@ -262,7 +264,6 @@
           "Instagram": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
           "LinkedIn": "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
           "Pinterest": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Pinterest_Logo.png",
-
         };
 
         if (hostingImageMap[hostingProvider]) {
@@ -279,10 +280,11 @@
         $("#res-i-country").text(data.country || 'N/A');
         $("#res-i-longitude").text(data.longitude || 'N/A');
         $("#res-i-latitude").text(data.latitude || 'N/A');
+
         $("#result-area").show();
-        updateHistory(domain, hostingProvider);
+        $("#whois-area").hide();
       } catch (error) {
-        alert('Error fetching hosting data');
+        alert("Failed to fetch hosting data");
         $("#result-area").hide();
       } finally {
         hideLoader();
@@ -297,37 +299,20 @@
       $("#loader").hide();
     }
 
-    function updateHistory(domain, hostingProvider) {
-      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-      history.push({ domain, hostingProvider });
-      localStorage.setItem('searchHistory', JSON.stringify(history));
-      displayHistory();
-    }
-
-    function displayHistory() {
-      const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-      if (history.length > 0) {
-        $("#history-list").empty();
-        history.forEach(item => {
-          const listItem = `<li>${item.domain} is hosted on ${item.hostingProvider}</li>`;
-          $("#history-list").append(listItem);
-        });
-        $("#history-area").show();
-      } else {
-        $("#history-area").hide();
-      }
-    }
-
-    function deleteHistory() {
-      localStorage.removeItem('searchHistory');  
-      $("#history-list").empty();  
-      $("#history-area").hide();   
+    function copyToClipboard(text) {
+      const tempInput = document.createElement('textarea');
+      tempInput.style.position = 'fixed';
+      tempInput.style.opacity = '0';
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      alert('Copied to clipboard!');
     }
 
     $(document).ready(function () {
-      displayHistory();  // Show history on page load
-
-      $("#domain_lookup_btn").click(function () {
+      $("#domain_lookup_btn").on("click", function () {
         const domain = $("#domain_input").val();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -337,7 +322,7 @@
         }
       });
 
-      $("#hosting_lookup_btn").click(function () {
+      $("#hosting_lookup_btn").on("click", function () {
         const domain = $("#domain_input").val();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -347,8 +332,14 @@
         }
       });
 
-      $("#delete-history-btn").click(function () {
-        deleteHistory();  
+      $("#share-whois-btn").on("click", function () {
+        const whoisInfo = $("#res-whois-json").text();
+        copyToClipboard(whoisInfo);
+      });
+
+      $("#share-hosting-btn").on("click", function () {
+        const hostingInfo = `IP: ${$("#res-i-ip").text()}\nISP: ${$("#res-i-isp").text()}\nCity: ${$("#res-i-city").text()}\nRegion: ${$("#res-i-region").text()}\nCountry: ${$("#res-i-country").text()}`;
+        copyToClipboard(hostingInfo);
       });
     });
   </script>
