@@ -64,7 +64,6 @@ app.get('/lookup', async (req, res) => {
   }
 });
 
-
 app.use((req, res) => {
   const ip = req.ip; 
   res.status(404).render('404', { ip: ip }); 
