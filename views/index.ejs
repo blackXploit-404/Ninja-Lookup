@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443583994127030"
     crossorigin="anonymous"></script>
@@ -22,129 +21,134 @@
   <meta name="robots" content="index, follow">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-   body {
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      background-color: #ffffff;
-      margin: 0;
-      padding: 20px;
-      color: rgb(255, 255, 255);
-    }
+ body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #f0f2f5; /* Softer, modern background */
+    margin: 0;
+    padding: 20px;
+    color: #333333; /* Dark gray for better readability */
+}
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-    }
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer, modern shadow */
+}
 
-    h1, h2 {
-      text-align: center;
-      color: #000000;
-      animation: fadeIn 0.5s;
-    }
+h1, h2 {
+    text-align: center;
+    color: #0056b3; /* Darker blue for titles */
+    font-size: 2em;
+    animation: fadeIn 0.5s;
+    margin-bottom: 20px;
+}
 
+form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Flex-wrap for better mobile responsiveness */
+    margin-bottom: 20px;
+    animation: slideIn 0.5s;
+}
+
+input[type="text"], textarea {
+    padding: 15px;
+    border: 1px solid #cccccc; /* Softer gray border */
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+    background-color: #ffffff;
+    color: #333333;
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+}
+
+input[type="text"]:focus, textarea:focus {
+    border-color: #0056b3; /* Blue border on focus */
+    outline: none;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    background-color: #007BFF; /* Consistent blue for buttons */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05);
+}
+
+#result-area, #whois-area, #history-area {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9; /* Softer background for result areas */
+    color: #333333; /* Dark gray text for readability */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Light shadow */
+    animation: fadeIn 0.5s;
+}
+
+.loader {
+    display: none;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+.error-message {
+    color: #ff6b6b;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Media Query for responsiveness */
+@media (max-width: 600px) {
     form {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      animation: slideIn 0.5s;
+        flex-direction: column; /* Stack form fields on smaller screens */
     }
 
-    input[type="text"] {
-      padding: 12px;
-      border: 1px solid #000000;
-      border-radius: 5px;
-      width: 70%;
-      margin-right: 10px;
-      transition: border-color 0.3s;
-      background-color: #ffffff;
-      color: rgb(0, 0, 0);
-      margin-top: 5px;
+    input[type="text"], textarea, button {
+        width: 100%;
+        margin: 5px 0;
     }
+}
 
-    input[type="text"]:focus {
-      border-color: #000000;
-      outline: none;
-    }
-
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-      margin-left: 10px;
-      margin-top: 5px;
-    }
-
-    button:hover {
-      background-color: #218838;
-      transform: scale(1.05);
-    }
-
-    #result-area, #whois-area, #history-area {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      color: black;
-      animation: fadeIn 0.5s;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: #000000;
-     
-      img {
-        height: 20px;
-        margin-top: 5px;
-      }
-    }
-
-    .loader {
-      display: none;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #3498db;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: auto;
-    }
-
-    .error-message {
-      color: #ff6b6b;
-      margin-top: 10px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  </style>
-
+</style>
 </head>
 
 <body>
@@ -191,31 +195,36 @@
       <ul id="history-list"></ul>
     </div>
 
-    <footer>
-      
-      <p><button><a href="https://github.com/blackXploit-404/Lookup-Now">Source Code</a></button></p>
-      <p>Developed with ❤️ by <a href="https://surajitsen.me/">Surajit Sen</a></p>
-      <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
-      <p><b>Powered by <a href="https://render.com/">Render</a></b><img src="https://pbs.twimg.com/profile_images/1735429515541938176/zOO1N7Su_400x400.jpg" alt="render"></p>
-      <p>Contact Us</p>
-      <div>
-        <form
-  action="https://formspree.io/f/mpwagglq"
-  method="POST"
->
-  <label>
-    Your email:
-    <input type="email" name="email">
-  </label>
-  <label>
-    Your message:
-    <textarea name="message"></textarea>
-  </label>
-  <!-- your other form fields go here -->
-  <button type="submit">Send</button>
-</form>
+    <footer style="background-color: #3f3e3e; padding: 20px; text-align: center; color: white;">
+      <div style="margin-bottom: 20px;">
+          <button style="background-color: #00a6ff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+              <a href="https://buymeacoffee.com/sensurajit" style="color: white; text-decoration: none;">Coffee..?</a>
+          </button>
+          <button style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+              <a href="/contact" style="color: white; text-decoration: none;">Contact Us</a>
+          </button>
       </div>
-    </footer>
+  
+      <p>Developed with ❤️ by <a href="https://surajitsen.me/" style="color: #007BFF;">Surajit Sen</a></p>
+      <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
+  
+      <div style="margin: 20px 0;">
+          <a href="https://www.linkedin.com/in/getsensurajit" target="_blank" style="margin-right: 15px;">
+              <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 32px; height: 32px;">
+          </a>
+          <a href="https://github.com/blackXploit-404" target="_blank" style="margin-right: 15px;">
+              <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" style="width: 32px; height: 32px;">
+          </a>
+          <a href="https://twitter.com/getsensurajit" target="_blank" style="margin-right: 15px;">
+              <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" style="width: 32px; height: 32px;">
+          </a>
+      </div>
+  
+      <p><b>Powered by <a href="https://render.com/" style="color: #007BFF;">Render</a></b></p>
+      <img src="https://pbs.twimg.com/profile_images/1735429515541938176/zOO1N7Su_400x400.jpg" alt="render" style="width: 50px; height: 50px; margin-top: 10px; border-radius: 50%;">
+  </footer>
+  
+  
 
   </div>
 
@@ -307,6 +316,7 @@
           "Pinterest": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Pinterest_Logo.png",
           "unifiedlayer.com": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Bluehost_logo.png",
           "1&1 IONOS SE": "https://upload.wikimedia.org/wikipedia/commons/4/4b/IONOS_logo.png",
+          "akamai.com": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Akamai_logo.png",
           
         };
         

@@ -64,11 +64,14 @@ app.get('/lookup', async (req, res) => {
   }
 });
 
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
+
 app.use((req, res) => {
   const ip = req.ip; 
   res.status(404).render('404', { ip: ip }); 
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
