@@ -2,8 +2,9 @@
 <html lang="en">
 
 <head>
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5443583994127030"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PR9BHV5V50"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -22,7 +23,7 @@
   <meta name="robots" content="index, follow">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    body {
+   body {
       font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       background-color: #ffffff;
       margin: 0;
@@ -104,8 +105,6 @@
         height: 20px;
         margin-top: 5px;
       }
-
-
     }
 
     .loader {
@@ -145,6 +144,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
   </style>
+
 </head>
 
 <body>
@@ -190,11 +190,12 @@
     </div>
 
     <footer>
-      <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
-      <p>A Devsecure Innovations Product</p>
-      <p><b>Powered by <a href="https://render.com/">Render</a></b><img src="https://pbs.twimg.com/profile_images/1735429515541938176/zOO1N7Su_400x400.jpg" alt="render"></p>
       <p><button><a href="https://github.com/blackXploit-404/Lookup-Now">Source Code</a></button></p>
+      <p>Developed with ❤️ by <a href="https://surajitsen.me/">Surajit Sen</a></p>
+      <p>&copy; 2024 Lookup-Now 🚀. All rights reserved.</p>
+      <p><b>Powered by <a href="https://render.com/">Render</a></b><img src="https://pbs.twimg.com/profile_images/1735429515541938176/zOO1N7Su_400x400.jpg" alt="render"></p>
     </footer>
+
   </div>
 
   <script>
@@ -319,11 +320,11 @@
       $("#loader").hide();
     }
 
-    $(document).ready(function() {
-      
+    $(document).ready(function () {
+
       updateHistory();
 
-      $("#domain_lookup_btn").click(async function() {
+      $("#domain_lookup_btn").click(async function () {
         const domain = $("#domain_input").val().trim();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -333,7 +334,7 @@
         fetchWhois(domain);
       });
 
-      $("#hosting_lookup_btn").click(async function() {
+      $("#hosting_lookup_btn").click(async function () {
         const domain = $("#domain_input").val().trim();
         if (!domain) {
           showError("Please enter a domain name.");
@@ -341,17 +342,52 @@
         }
         hideError();
         if (!historyList.includes(domain)) {
-          historyList.push(domain); 
+          historyList.push(domain);
           updateHistory();
         }
         hostingLookup(domain);
       });
 
-      $(document).on("click", ".remove-history-btn", function() {
+      $(document).on("click", ".remove-history-btn", function () {
         const index = $(this).data("index");
-        historyList.splice(index, 1); 
+        historyList.splice(index, 1);
         updateHistory();
       });
+
+      // Clipboard functionality for WHOIS Info
+      $("#share-whois-btn").click(function () {
+        const whoisData = $("#res-whois-json").text();
+        navigator.clipboard.writeText(whoisData)
+          .then(() => {
+            alert('WHOIS info copied to clipboard!');
+          })
+          .catch(err => {
+            alert('Failed to copy WHOIS info.');
+          });
+      });
+
+      // Clipboard functionality for Hosting Info
+      $("#share-hosting-btn").click(function () {
+        const hostingInfo = `
+          Domain: ${$("#hosting-message").text()}
+          IP: ${$("#res-i-ip").text()}
+          IP Type: ${$("#res-i-iptype").text()}
+          ISP: ${$("#res-i-isp").text()}
+          City: ${$("#res-i-city").text()}
+          Region: ${$("#res-i-region").text()}
+          Country: ${$("#res-i-country").text()}
+          Longitude: ${$("#res-i-longitude").text()}
+          Latitude: ${$("#res-i-latitude").text()}
+        `;
+        navigator.clipboard.writeText(hostingInfo)
+          .then(() => {
+            alert('Hosting info copied to clipboard!');
+          })
+          .catch(err => {
+            alert('Failed to copy hosting info.');
+          });
+      });
+
     });
   </script>
 </body>
