@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Not Found</title>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #000000;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #ff1900;
-    }
-
-    a {
-      color: #3498db;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found - Lookup-Now</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        .svg-container {
+            margin-top: 30px;
+        }
+        .svg-container svg {
+            width: 300px;
+            height: auto;
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
     <h1>404 - Page Not Found</h1>
-    <p>Nub Sorry, we couldn't find the page you were looking for.</p>
-    <a href="/">Go back to the home page</a>
-  </div>
+    <p>Oops! The page you are looking for doesn't exist.</p>
+    <a href="/">Back to Home</a>
+    
+    <div class="svg-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="32" fill="#FFD15C"/>
+            <g stroke="#374151" stroke-width="2" fill="none">
+                <line x1="24" y1="40" x2="40" y2="40"/>
+                <circle cx="24" cy="24" r="4" fill="#fff"/>
+                <circle cx="40" cy="24" r="4" fill="#fff"/>
+            </g>
+            <path d="M22 30c1.5 2 4.5 2 6 0" fill="none" stroke="#374151" stroke-width="2"/>
+        </svg>
+    </div>
 </body>
-
 </html>
