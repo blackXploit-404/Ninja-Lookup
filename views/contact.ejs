@@ -9,6 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            background-image: url(https://images.unsplash.com/photo-1699891730676-037bed3c1bed?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8d2Vic2l0ZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +24,7 @@
             overflow: hidden;
         }
         .svg-container {
-            background-color: #007bff;
+            background-color: #f9e555;
             padding: 20px;
             display: flex;
             align-items: center;
@@ -57,27 +58,61 @@
     </style>
     <!-- Google reCAPTCHA v2 -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(e) {
+            e.preventDefault(); 
+
+            const response = grecaptcha.getResponse();
+            if (response.length === 0) {
+                alert('Please complete the reCAPTCHA.');
+            } else {
+                
+                const form = document.getElementById("contact-form");
+                const formData = new FormData(form);
+
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Message sent successfully!');
+                        form.reset();
+                        grecaptcha.reset(); 
+                    } else {
+                        alert('Error sending message. Please try again later.');
+                    }
+                })
+                .catch(error => {
+                    alert('Error sending message. Please try again later.');
+                    console.error('Error:', error);
+                });
+            }
+        }
+    </script>
 </head>
 <body>
 
     <div class="contact-container">
-        <!-- Custom SVG section -->
+        
         <div class="svg-container">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150">
                 <path fill="currentColor" d="M10 2C5.59 2 2 5.59 2 10c0 4.41 3.59 8 8 8 1.85 0 3.55-.63 4.9-1.68l4.39 4.39 1.41-1.41-4.39-4.39C17.37 13.55 18 11.85 18 10c0-4.41-3.59-8-8-8zm0 2c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6z"/>
             </svg>
         </div>
         
-
         <!-- Form section -->
         <div class="form-container">
             <h2>Contact Us</h2>
-            <form action="https://formspree.io/f/mpwagglq" method="POST">
+            <form id="contact-form" onsubmit="onSubmit(event)" action="https://formspree.io/f/mpwagglq" method="POST">
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <textarea name="message" placeholder="Your Message" required></textarea>
 
-                <!-- reCAPTCHA widget -->
                 <div class="g-recaptcha" data-sitekey="6LeJ0kwqAAAAAE-p7Rj1bAzESik7phyeqjWiW2Ps"></div>
 
                 <button type="submit">Send Message</button>
