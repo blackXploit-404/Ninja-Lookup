@@ -1,4 +1,4 @@
-# Ninja-Lookup
+# Lookup-Now is now Ninja-Lookup
 
 🔍 A web application that allows users to perform domain and hosting lookups, including WHOIS information and hosting provider details.
 
