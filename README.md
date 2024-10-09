@@ -1,4 +1,4 @@
-# Lookup-Now
+# Lookup-Now is now Ninja-Lookup
 
 🔍 A web application that allows users to perform domain and hosting lookups, including WHOIS information and hosting provider details.
 
@@ -25,13 +25,13 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/blackXploit-404/Lookup-Now.git
+   git clone https://github.com/blackXploit-404/Ninja-Lookup.git
    ```
 
 2. Navigate into the project directory:
 
    ```bash
-   cd Lookup-Now
+   cd Ninja-Lookup
    ```
 
 3. Install dependencies:
